@@ -6,14 +6,13 @@ class Pages extends Controller
     public function __construct()
     {
         $this->userModel=$this->model('User');
+        $this->postModel=$this->model('Posts');
     }
 
     public function index()
     {
-        //echo "home page testing stage";
         $this->view('pages/index');
         $users=$this->userModel->getUser();
-        //print_r($users);
     }
 
     public function about()
@@ -32,7 +31,7 @@ class Pages extends Controller
     }
     public function posts()
     {
-        $this->view('pages/blogs');
+        $this->view('pages/blog/blogs');
     }
 
     public function dashboard()
@@ -50,8 +49,8 @@ class Pages extends Controller
             $userInfo=$this->userModel->login($data);
         if ($userInfo) {
             $this->createUserSession($userInfo);
-            //print_r($_SESSION);
-            $this->view('pages/blogs');
+            $data=$this->postModel->getPosts();
+            $this->view('pages/blog/blogs', $data);
         } else {
             echo "you dont exists";
         }
@@ -74,11 +73,42 @@ class Pages extends Controller
     public function createUserSession($userInfo)
     {
         session_start();
-        if (!$_SESSION['user']) {
-            $_SESSION['user']=array();
-        }
         $_SESSION['userId']=$userInfo->UserID;
         $_SESSION['username']=$userInfo->UserName;
         $_SESSION['email']=$userInfo->Email;
+    }
+
+    public function writeBlog()
+    {
+        $this->view('pages/blog/writeBlog');
+    }
+
+    public function postBlog()
+    {
+        session_start();
+        $userId=$_SESSION['userId'];
+        $title=$_POST['blogTitle'];
+        $blogImageArray=$_FILES['fileToUpload'];
+        $category=$_POST['category'];
+        $tags=$_POST['tags'];
+        $description=$_POST['blogDescription'];
+        $data=['title'=>$title,'image'=>$blogImageArray['name'],'category'=>$category,
+        'tags'=>$tags,'description'=>$description,'user'=>$userId];
+        if ($this->postModel->postBlog($data)) {
+            $this->view('pages/blog/blogs');
+        } else {
+            die("Something went wrong retry");
+        }
+    }
+
+    public function test()
+    {
+        $this->view('pages/test');
+    }
+
+    public function testresult()
+    {
+        print_r($_POST);
+        print_r($_FILES);
     }
 }

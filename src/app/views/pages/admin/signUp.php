@@ -10,7 +10,6 @@
     <meta name="generator" content="Hugo 0.88.1">
     <title>SignUp Page</title>
     <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/sign-in/">
-    <link href="signin.css" rel="stylesheet">
     <script src="<?php echo URLROOT?>node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
     <link href="<?php echo URLROOT?>node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
   </head>

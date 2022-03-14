@@ -10,7 +10,6 @@ class Core
     public function __construct()
     {
         $url=$this->getUrl();
-        //print_r($url);
         if (file_exists('../app/controllers/'.ucwords($url[0]).'.php')) {
             //Will set new controller
             $this->currentController=ucwords($url[0]);
@@ -30,10 +29,6 @@ class Core
 
         //Get paras
         $this->params= $url ? array_values($url) : [];
-        // print_r($this->currentController);
-        // print_r($this->currentMethod);
-        // print_r($this->params);
-        //Call a callback with array of params
         call_user_func_array([$this->currentController, $this->currentMethod], $this->params);
     }
 
